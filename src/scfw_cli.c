@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <sys/neutrino.h>
 
@@ -15,9 +16,24 @@
 
 #include <errno.h>
 
+/* Local types */
+typedef enum svc_e{
+	pm = 1,   			/* Power Management Service */
+	rm,				/* Resource Management Service */
+	msc,			/* Miscellaneous service */
+	pad,			/* Pad configuration service */
+	tmr,			/* Timer service */
+	intr,			/* Interrupt service */
+	inv				/* Invalid selection*/
+}svc_t;
+
+#define PARAM 2		/* Holds the amount of valid parameters to pass to the services (opt and param)*/
+
 int main(int argc, char *argv[]) {
 	int sci_fd;
     sc_err_t status;
+    svc_t svc = inv;
+    char *options[PARAM] = {NULL, NULL};	/* Array used to pass information to the services */
     int cnt = 0;
     int err;
 
@@ -41,24 +57,55 @@ int main(int argc, char *argv[]) {
 
     /* Process parameters */
     if(argc == 1){
-    	int svc;
+    	int tmp;
     	printf("Select service:\n");
     	printf("1.- Power Management Service\n");
 
-    	scanf("%d", &svc);
-    	switch(svc){
-    		case 1:
-    			pm_service_main(sci_fd, 0, NULL);
+    	scanf("%d", &tmp);
+    	switch(tmp){
+    		case pm:
+    			svc = pm;
     			break;
     		default:
+    			svc = inv;
     			printf("Please select a valid option\n");
     			break;
     	}
     } else{
-    	printf("%d, %s", argc, argv[0]);
-		/* TODO implement argument friendly set-up*/
-		return EXIT_FAILURE;
+    	const char *tmp_str;
+
+    	/* Parse command options */
+		for(int i = 1; i < argc; i++){
+			if(strncmp(argv[i], "-svc=", strlen("-svc=")) == 0){
+				tmp_str = argv[i] + strlen("-svc=");
+				/* Get service */
+				if(strncmp(tmp_str, "pm", strlen("pm")) == 0){
+					svc = pm;
+				} else{
+					svc = inv;
+					printf("Invalid -svc option.\n");
+				}
+			} else if(strncmp(argv[i], "-opt=", strlen("-opt=")) == 0){
+				options[0] = argv[i] + strlen("-opt=");
+			} else if(strncmp(argv[i], "-param=", strlen("-param=")) == 0){
+				options[1] = argv[i] + strlen("-param=");
+			} else{
+				printf("%s is an invalid option\n", argv[i]);
+			}
+		}
     }
+
+    /* Call Service */
+	switch(svc){
+		case pm:
+			pm_service_main(sci_fd, options);
+			break;
+		case inv:
+		default:
+			printf("Invalid service selection\n");
+			break;
+	}
+
 
     /* Close IPC channel between SCU */
     do {
