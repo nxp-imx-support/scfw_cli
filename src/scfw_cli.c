@@ -13,14 +13,15 @@
 
 /* Services */
 #include "pm/pm.h"
+#include "msc/msc.h"
 
 #include <errno.h>
 
 /* Local types */
 typedef enum svc_e{
 	pm = 1,   			/* Power Management Service */
-	rm,				/* Resource Management Service */
 	msc,			/* Miscellaneous service */
+	rm,				/* Resource Management Service */
 	pad,			/* Pad configuration service */
 	tmr,			/* Timer service */
 	intr,			/* Interrupt service */
@@ -60,11 +61,15 @@ int main(int argc, char *argv[]) {
     	int tmp;
     	printf("Select service:\n");
     	printf("1.- Power Management Service\n");
+    	printf("2.- Miscellaneous Service\n");
 
     	scanf("%d", &tmp);
     	switch(tmp){
     		case pm:
     			svc = pm;
+    			break;
+    		case msc:
+    			svc = msc;
     			break;
     		default:
     			svc = inv;
@@ -81,6 +86,8 @@ int main(int argc, char *argv[]) {
 				/* Get service */
 				if(strncmp(tmp_str, "pm", strlen("pm")) == 0){
 					svc = pm;
+				} else if(strncmp(tmp_str, "msc", strlen("msc")) == 0){
+					svc = msc;
 				} else{
 					svc = inv;
 					printf("Invalid -svc option.\n");
@@ -99,6 +106,9 @@ int main(int argc, char *argv[]) {
 	switch(svc){
 		case pm:
 			pm_service_main(sci_fd, options);
+			break;
+		case msc:
+			msc_service_main(sci_fd, options);
 			break;
 		case inv:
 		default:
