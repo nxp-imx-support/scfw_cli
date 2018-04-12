@@ -17,6 +17,8 @@
 #include <fcntl.h>
 /* Include needed for sc_rsrc2str(), sc_status2str() functions only */
 #include <sys/sci.h>
+/* Common helper functions */
+#include "../common/common.h"
 
 static const char * sc_power_mode_str[] = {
     "SC_PM_PW_MODE_OFF",
@@ -43,7 +45,6 @@ static void pm_set_clk_rate(int fd, char *param);
 
 /* Helper functions */
 static const char* sc_pw2str(sc_pm_power_mode_t pw);
-static int parse_param(char *param, int param_array[], int param_length);
 
 void pm_service_main(int fd, char *argv[]){
 	pm_opt_t pm_opt = inv;
@@ -394,23 +395,4 @@ static const char* sc_pw2str(sc_pm_power_mode_t pw){
 	} else {
 		return "INVALID POWER MODE";
 	}
-}
-
-/* Parses a string of N parameters delimited by _
- *
- * Return number of parameters parsed
- * */
-static int parse_param(char *param, int param_array[], int param_length){
-	char *tmp;
-	char *tok = {"_"};
-	int i = 0;
-
-	tmp = strtok(param, tok);
-	while((tmp != NULL) && (i < param_length)){
-		param_array[i] = atoi(tmp);
-		++i;
-		tmp = strtok(NULL, tok);
-	}
-
-	return i;
 }
