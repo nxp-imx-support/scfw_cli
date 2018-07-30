@@ -72,15 +72,15 @@ void misc_service_main(int fd, char *argv[]){
 		}
 	} else {
 		/* Check if a valid service option was passed */
-		if(strncmp(argv[0], "get-ctl", strlen("get-ctl")) == 0){
+		if(strncmp(argv[0], "get_control", strlen("get_control")) == 0){
 			misc_opt = get_ctl;
-		} else if(strncmp(argv[0], "set-ctl", strlen("set-ctl")) == 0){
+		} else if(strncmp(argv[0], "set_control", strlen("set_control")) == 0){
 			misc_opt = set_ctl;
-		} else if(strncmp(argv[0], "get-temp", strlen("get-temp")) == 0){
+		} else if(strncmp(argv[0], "get_temp", strlen("get_temp")) == 0){
 			misc_opt = get_temp;
-		} else if(strncmp(argv[0], "set-temp", strlen("set-temp")) == 0){
+		} else if(strncmp(argv[0], "set_temp", strlen("set_temp")) == 0){
 			misc_opt = set_temp;
-		} else if(strncmp(argv[0], "bld-inf", strlen("bld-inf")) == 0){
+		} else if(strncmp(argv[0], "build_info", strlen("build_info")) == 0){
 			misc_opt = bld_inf;
 		} else{
 			misc_opt = inv;

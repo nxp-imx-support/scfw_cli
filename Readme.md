@@ -36,11 +36,11 @@ selected but no parameter the user will be prompted to enter the parameters.
 		sc_pm_get_resource_power_mode =get_resource_power_mode
 		sc_pm_set_clock_rate =set_clock_rate
 		sc_pm_get_clock_rate =get_clock_rate
-		sc_misc_get_control =get-ctl
-		sc_misc_set_control =set-ctl
-		sc_misc_get_temp =get-temp
-		sc_misc_set_temp =set-temp
-		sc_misc_build_info =bld-info
+		sc_misc_get_control =get_control
+		sc_misc_set_control =set_control
+		sc_misc_get_temp =get_temp
+		sc_misc_set_temp =set_temp
+		sc_misc_build_info =build_info
 	-param: The parameters will vary depending on the function that will be called, but all parameters are delimited by '_'.
 
 	Parameters used by each function:
