@@ -81,13 +81,13 @@ void pm_service_main(int fd, char *argv[]){
 		}
 	} else {
 		/* Check if a valid service option was passed */
-		if(strncmp(argv[0], "get-rsrc-pw", strlen("get-rsrc-pw")) == 0){
+		if(strncmp(argv[0], "get_resource_power_mode", strlen("get_resource_power_mode")) == 0){
 			pm_opt = get_pw;
-		} else if(strncmp(argv[0], "set-rsrc-pw", strlen("set-rsrc-pw")) == 0){
+		} else if(strncmp(argv[0], "set_resource_power_mode", strlen("set_resource_power_mode")) == 0){
 			pm_opt = set_pw;
-		} else if(strncmp(argv[0], "get-clk-rate", strlen("get-clk-rate")) == 0){
+		} else if(strncmp(argv[0], "get_clock_rate", strlen("get_clock_rate")) == 0){
 			pm_opt = get_clk_rate;
-		} else if(strncmp(argv[0], "set-clk-rate", strlen("set-clk-rate")) == 0){
+		} else if(strncmp(argv[0], "set_clock_rate", strlen("set_clock_rate")) == 0){
 			pm_opt = set_clk_rate;
 		} else{
 			pm_opt = inv;

@@ -32,10 +32,10 @@ selected but no parameter the user will be prompted to enter the parameters.
 		Power Management Service =pm
 		Miscellaneous service =misc
 	-opt: The functions supported are:
-		sc_pm_set_resource_power_mode =set-rsrc-pw
-		sc_pm_get_resource_power_mode =get-rsrc-pw
-		sc_pm_set_clock_rate =set-clk-rate
-		sc_pm_get_clock_rate =get-clk-rate
+		sc_pm_set_resource_power_mode =set_resource_power_mode
+		sc_pm_get_resource_power_mode =get_resource_power_mode
+		sc_pm_set_clock_rate =set_clock_rate
+		sc_pm_get_clock_rate =get_clock_rate
 		sc_misc_get_control =get-ctl
 		sc_misc_set_control =set-ctl
 		sc_misc_get_temp =get-temp
@@ -45,7 +45,7 @@ selected but no parameter the user will be prompted to enter the parameters.
 
 	Parameters used by each function:
 		Power management service:
-			set-rsrc-pw: This functions takes 3 parameters, firstResource_lastResource_powerMode
+			set_resource_power_mode: This functions takes 3 parameters, firstResource_lastResource_powerMode
 					The firstResource parameter is the first resource that will change its powerMode.
 					The lastResource parameter is the last resource that will change its powerMode.
 					The powerMode parameter is the power mode to set for the parameters, the options are:
@@ -55,18 +55,18 @@ selected but no parameter the user will be prompted to enter the parameters.
 							ON = 3
 					If only one resource is needed then set firstResource and lastResource equal.
 					To turn on resources 0 through 541 call: 
-					    scfw_cli -svc=pm -opt=set-rsrc-pw -param=0_541_3
+					    scfw_cli -svc=pm -opt=set_resource_power_mode -param=0_541_3
 					To turn off resource 0 call: 
-					    scfw_cli -svc=pm -opt=set-rsrc-pw -param=0_0_0
-			get-rsrc-pw: This function takes 2 parameters, firstResource_lastResource
+					    scfw_cli -svc=pm -opt=set_resource_power_mode -param=0_0_0
+			get_resource_power_mode: This function takes 2 parameters, firstResource_lastResource
 					The firsResource parameter is the first resource to get its power mode from.
 					The lastResource parameter is the last resource to get its power mode from.
 					If only one resource is needed then set firstResource and lastResource equal.
 					To get the power mode from all resources call: 
-					    scfw_cli -svc=pm -opt=get-rsrc-pw -param=0_541
+					    scfw_cli -svc=pm -opt=get_resource_power_mode -param=0_541
 					To get the power mode from resource 0 call: 
-					    scfw_cli -svc=pm -opt=get-rsrc-pw -param=0_0
-			set-rsrc-pw: This functions takes 3 parameters, resource_clock_rate
+					    scfw_cli -svc=pm -opt=get_resource_power_mode -param=0_0
+			set_clock_rate: This functions takes 3 parameters, resource_clock_rate
 					The resource parameter is the resource that will change its clock rate.
 					The clock parameter is the clock type that will change its clock rate, the options are:
 						SC_PM_CLK_SLV_BUS       0
@@ -85,16 +85,16 @@ selected but no parameter the user will be prompted to enter the parameters.
 					Refer to the SCFW documentation 'Clock list' for the type of clock that each resource has.
 					The rate parameter is the clock rate to set in Hz.
 					To set the CPU clock rate to 1200MHz on SC_R_A53 call: 
-					    scfw_cli -svc=pm -opt=set-clk-rate -param=0_2_1200000000
+					    scfw_cli -svc=pm -opt=set_clock_rate -param=0_2_1200000000
 					where 0 is the resource number, 2 is SC_PM_CLK_CPU and 1200000000 is the frequency in Hz.
-			get-clk-rate: This function takes 2 parameters, firstResource_lastResource
+			get_clock_rate: This function takes 2 parameters, firstResource_lastResource
 					The firsResource parameter is the first resource to get its clock rates from.
 					The lastResource parameter is the last resource to get its clock rates from.
 					If only one resource is needed then set firstResource and lastResource equal.
 					To get the clock rates from all resources call: 
-					    scfw_cli -svc=pm -opt=get-clk-rate -param=0_541
+					    scfw_cli -svc=pm -opt=get_clock_rate -param=0_541
 					To get the clock rates from resource 0 call: 
-					    scfw_cli -svc=pm -opt=get-clk-rate -param=0_0
+					    scfw_cli -svc=pm -opt=get_clock_rate -param=0_0
 
 ## Authors
 
