@@ -30,11 +30,17 @@ selected but no parameter the user will be prompted to enter the parameters.
 
 	-svc: The services supported are:
 		Power Management Service =pm
+		Miscellaneous service =msc
 	-opt: The functions supported are:
 		sc_pm_set_resource_power_mode =set-rsrc-pw
 		sc_pm_get_resource_power_mode =get-rsrc-pw
 		sc_pm_set_clock_rate =set-clk-rate
 		sc_pm_get_clock_rate =get-clk-rate
+		sc_misc_get_control =get-ctl
+		sc_misc_set_control =set-ctl
+		sc_misc_get_temp =get-temp
+		sc_misc_set_temp =set-temp
+		sc_misc_build_info =bld-info
 	-param: The parameters will vary depending on the function that will be called, but all parameters are delimited by '_'.
 
 	Parameters used by each function:
