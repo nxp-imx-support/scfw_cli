@@ -33,24 +33,24 @@
 /* Common helper functions */
 #include "../common/common.h"
 
-typedef enum msc_opt_e{
+typedef enum misc_opt_e{
 	get_ctl = 1,				/* Get Control */
 	set_ctl,					/* Set Control */
 	get_temp,					/* Get temperature */
 	set_temp,					/* Set temperature */
 	bld_inf,					/* Build info */
 	inv
-}msc_opt_t;
+}misc_opt_t;
 
 /* Prototypes */
-static void msc_get_ctl(int fd, char *param);
-static void msc_set_ctl(int fd, char *param);
-static void msc_get_temp(int fd, char *param);
-static void msc_set_temp(int fd, char *param);
-static void msc_bld_inf(int fd);
+static void misc_get_ctl(int fd, char *param);
+static void misc_set_ctl(int fd, char *param);
+static void misc_get_temp(int fd, char *param);
+static void misc_set_temp(int fd, char *param);
+static void misc_bld_inf(int fd);
 
-void msc_service_main(int fd, char *argv[]){
-	msc_opt_t msc_opt = inv;
+void misc_service_main(int fd, char *argv[]){
+	misc_opt_t misc_opt = inv;
 
 	/* Process arguments */
 	if(argv[0] == NULL){
@@ -65,53 +65,53 @@ void msc_service_main(int fd, char *argv[]){
 
 		scanf("%d", &svc);
 		if((svc >= inv) | (svc < get_ctl)){
-			msc_opt = inv;
+			misc_opt = inv;
 			printf("Please select a valid option\n");
 		} else{
-			msc_opt = svc;
+			misc_opt = svc;
 		}
 	} else {
 		/* Check if a valid service option was passed */
 		if(strncmp(argv[0], "get-ctl", strlen("get-ctl")) == 0){
-			msc_opt = get_ctl;
+			misc_opt = get_ctl;
 		} else if(strncmp(argv[0], "set-ctl", strlen("set-ctl")) == 0){
-			msc_opt = set_ctl;
+			misc_opt = set_ctl;
 		} else if(strncmp(argv[0], "get-temp", strlen("get-temp")) == 0){
-			msc_opt = get_temp;
+			misc_opt = get_temp;
 		} else if(strncmp(argv[0], "set-temp", strlen("set-temp")) == 0){
-			msc_opt = set_temp;
+			misc_opt = set_temp;
 		} else if(strncmp(argv[0], "bld-inf", strlen("bld-inf")) == 0){
-			msc_opt = bld_inf;
+			misc_opt = bld_inf;
 		} else{
-			msc_opt = inv;
-			printf("MSC: %s is an invalid service option\n", argv[0]);
+			misc_opt = inv;
+			printf("MISC: %s is an invalid service option\n", argv[0]);
 		}
 	}
 
 	/* Call service option */
-	switch(msc_opt){
+	switch(misc_opt){
 			case get_ctl:
-				msc_get_ctl(fd, argv[1]);
+				misc_get_ctl(fd, argv[1]);
 				break;
 			case set_ctl:
-				msc_set_ctl(fd, argv[1]);
+				misc_set_ctl(fd, argv[1]);
 				break;
 			case get_temp:
-				msc_get_temp(fd, argv[1]);
+				misc_get_temp(fd, argv[1]);
 				break;
 			case set_temp:
-				msc_set_temp(fd, argv[1]);
+				misc_set_temp(fd, argv[1]);
 				break;
 			case bld_inf:
-				msc_bld_inf(fd);
+				misc_bld_inf(fd);
 				break;
 			default:
-				printf("MSC: invalid service option\n");
+				printf("MISC: invalid service option\n");
 				break;
 		}
 }
 
-void msc_get_ctl(int fd, char *param){
+void misc_get_ctl(int fd, char *param){
 
 	imx_dcmd_sc_misc_control_t ctl;
 
@@ -140,7 +140,7 @@ void msc_get_ctl(int fd, char *param){
 			ctl.resource = tmp[0];
 			ctl.ctrl = tmp[1];
 		} else {
-			printf("MSC:GET_CTL:Invalid -param=\n");
+			printf("MISC:GET_CTL:Invalid -param=\n");
 			return;
 		}
 	}
@@ -166,19 +166,19 @@ void msc_get_ctl(int fd, char *param){
 	}
 }
 
-void msc_set_ctl(int fd, char *param){
+void misc_set_ctl(int fd, char *param){
 	//TODO
 }
 
-void msc_get_temp(int fd, char *param){
+void misc_get_temp(int fd, char *param){
 	//TODO
 }
 
-void msc_set_temp(int fd, char *param){
+void misc_set_temp(int fd, char *param){
 	//TODO
 }
 
-void msc_bld_inf(int fd){
+void misc_bld_inf(int fd){
 	imx_dcmd_sc_misc_build_info_t build_info;
 	sc_err_t status;
 	int err, cnt = 0;

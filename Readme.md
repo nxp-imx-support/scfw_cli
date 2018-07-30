@@ -30,7 +30,7 @@ selected but no parameter the user will be prompted to enter the parameters.
 
 	-svc: The services supported are:
 		Power Management Service =pm
-		Miscellaneous service =msc
+		Miscellaneous service =misc
 	-opt: The functions supported are:
 		sc_pm_set_resource_power_mode =set-rsrc-pw
 		sc_pm_get_resource_power_mode =get-rsrc-pw

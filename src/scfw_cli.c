@@ -39,11 +39,11 @@
 /* Local types */
 typedef enum svc_e{
 	pm = 1,   			/* Power Management Service */
-	msc,			/* Miscellaneous service */
+	misc,			/* Miscellaneous service */
 	rm,				/* Resource Management Service */
 	pad,			/* Pad configuration service */
-	tmr,			/* Timer service */
-	intr,			/* Interrupt service */
+	timer,			/* Timer service */
+	irq,			/* Interrupt service */
 	inv				/* Invalid selection*/
 }svc_t;
 
@@ -87,8 +87,8 @@ int main(int argc, char *argv[]) {
     		case pm:
     			svc = pm;
     			break;
-    		case msc:
-    			svc = msc;
+    		case misc:
+    			svc = misc;
     			break;
     		default:
     			svc = inv;
@@ -105,8 +105,8 @@ int main(int argc, char *argv[]) {
 				/* Get service */
 				if(strncmp(tmp_str, "pm", strlen("pm")) == 0){
 					svc = pm;
-				} else if(strncmp(tmp_str, "msc", strlen("msc")) == 0){
-					svc = msc;
+				} else if(strncmp(tmp_str, "misc", strlen("misc")) == 0){
+					svc = misc;
 				} else{
 					svc = inv;
 					printf("Invalid -svc option.\n");
@@ -126,8 +126,8 @@ int main(int argc, char *argv[]) {
 		case pm:
 			pm_service_main(sci_fd, options);
 			break;
-		case msc:
-			msc_service_main(sci_fd, options);
+		case misc:
+			misc_service_main(sci_fd, options);
 			break;
 		case inv:
 		default:

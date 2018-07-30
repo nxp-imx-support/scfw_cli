@@ -22,6 +22,6 @@
 #define SRC_MSC_MSC_H_
 
 /* Prototype */
-void msc_service_main(int fd, char *argv[]);
+void misc_service_main(int fd, char *argv[]);
 
 #endif /* SRC_MSC_MSC_H_ */
