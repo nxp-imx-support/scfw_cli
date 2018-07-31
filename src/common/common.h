@@ -22,5 +22,8 @@
 #define SRC_COMMON_COMMON_H_
 
 int parse_param(char *param, int param_array[], int param_length);
+char** str_split(char* a_str);
+int str2index(char *str, const char *str_array[], int str_len);
+int sc_str2rsrc(char *str);
 
 #endif /* SRC_COMMON_COMMON_H_ */
