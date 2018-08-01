@@ -17,21 +17,23 @@ The BSP contains the headers/libraries that this project needs to link against.
 ## Usage
 
 The scfw_cli utility can be called without options and the user will be prompted
-to select the SCFW function call to make. The user can select the service only for instance
-and it will be prompted to select a function within that service, if a service and function is 
-selected but no parameter the user will be prompted to enter the parameters.
+to select the SCFW function call to make. The user can select the service only and it will be 
+prompted to select a function within that service, if a service and function is 
+selected but no parameters are passed the user will be prompted to enter the parameters.
+
+The utility usage information can be displayed on QNX by calling 'use scfw_cli'
 
 	scfw_cli [options]
 
 	options:
 		-svc=[string]			Select the service to call.
 		-opt=[string]			Select the function to call.
-		-param=[int]_[int]_...		Pass the parameters of the function that will be called.
+		-param=[string],[string],...	Pass the parameters of the function that will be called.
 
 	-svc: The services supported are:
 		Power Management Service =pm
 		Miscellaneous service =misc
-	-opt: The functions supported are:
+	-opt: The functions currently supported are:
 		sc_pm_set_resource_power_mode =set_resource_power_mode
 		sc_pm_get_resource_power_mode =get_resource_power_mode
 		sc_pm_set_clock_rate =set_clock_rate
@@ -41,60 +43,40 @@ selected but no parameter the user will be prompted to enter the parameters.
 		sc_misc_get_temp =get_temp
 		sc_misc_set_temp =set_temp
 		sc_misc_build_info =build_info
-	-param: The parameters will vary depending on the function that will be called, but all parameters are delimited by '_'.
+	-param: The parameters will vary depending on the function that will be called, but all parameters are delimited by ','.
+		Refer to the SCFW documentation for a definition of parameters that each function takes.
 
-	Parameters used by each function:
+	Usage examples:
 		Power management service:
-			set_resource_power_mode: This functions takes 3 parameters, firstResource_lastResource_powerMode
-					The firstResource parameter is the first resource that will change its powerMode.
-					The lastResource parameter is the last resource that will change its powerMode.
-					The powerMode parameter is the power mode to set for the parameters, the options are:
-							OFF = 0
-							STANDBY = 1
-							LOWPOWER= 2
-							ON = 3
-					If only one resource is needed then set firstResource and lastResource equal.
-					To turn on resources 0 through 541 call: 
-					    scfw_cli -svc=pm -opt=set_resource_power_mode -param=0_541_3
-					To turn off resource 0 call: 
-					    scfw_cli -svc=pm -opt=set_resource_power_mode -param=0_0_0
-			get_resource_power_mode: This function takes 2 parameters, firstResource_lastResource
-					The firsResource parameter is the first resource to get its power mode from.
-					The lastResource parameter is the last resource to get its power mode from.
-					If only one resource is needed then set firstResource and lastResource equal.
-					To get the power mode from all resources call: 
-					    scfw_cli -svc=pm -opt=get_resource_power_mode -param=0_541
-					To get the power mode from resource 0 call: 
-					    scfw_cli -svc=pm -opt=get_resource_power_mode -param=0_0
-			set_clock_rate: This functions takes 3 parameters, resource_clock_rate
-					The resource parameter is the resource that will change its clock rate.
-					The clock parameter is the clock type that will change its clock rate, the options are:
-						SC_PM_CLK_SLV_BUS       0
-						SC_PM_CLK_MST_BUS       1
-						SC_PM_CLK_PER           2
-						SC_PM_CLK_PHY           3
-						SC_PM_CLK_MISC          4
-						SC_PM_CLK_MISC0         0
-						SC_PM_CLK_MISC1         1
-						SC_PM_CLK_MISC2         2
-						SC_PM_CLK_MISC3         3
-						SC_PM_CLK_MISC4         4
-						SC_PM_CLK_CPU           2
-						SC_PM_CLK_PLL           4
-						SC_PM_CLK_BYPASS        4
-					Refer to the SCFW documentation 'Clock list' for the type of clock that each resource has.
-					The rate parameter is the clock rate to set in Hz.
+			set_resource_power_mode: This function takes 2 parameters- Resource,Power_mode
+					For instance to turn on SC_R_A53 call: 
+					    scfw_cli -svc=pm -opt=set_resource_power_mode -param=SC_R_ALL,SC_PM_PW_MODE_ON
+					For a complete list of power modes refer to the SCFW API guide.
+			get_resource_power_mode: This function takes 1 parameter- Resource
+					For instance to get the power mode from all resources call: 
+					    scfw_cli -svc=pm -opt=get_resource_power_mode -param=SC_R_ALL
+			set_clock_rate: This functions takes 3 parameters- Resource,Clock_type,Clock_rate_in_Hz
 					To set the CPU clock rate to 1200MHz on SC_R_A53 call: 
-					    scfw_cli -svc=pm -opt=set_clock_rate -param=0_2_1200000000
-					where 0 is the resource number, 2 is SC_PM_CLK_CPU and 1200000000 is the frequency in Hz.
-			get_clock_rate: This function takes 2 parameters, firstResource_lastResource
-					The firsResource parameter is the first resource to get its clock rates from.
-					The lastResource parameter is the last resource to get its clock rates from.
-					If only one resource is needed then set firstResource and lastResource equal.
+					    scfw_cli -svc=pm -opt=set_clock_rate -param=SC_R_A53,SC_PM_CLK_CPU,1200000000
+					Refer to the SCFW documentation 'Clock list' for the type of clock that each resource has.
+			get_clock_rate: This function takes 1 parameter- Resource
 					To get the clock rates from all resources call: 
-					    scfw_cli -svc=pm -opt=get_clock_rate -param=0_541
-					To get the clock rates from resource 0 call: 
-					    scfw_cli -svc=pm -opt=get_clock_rate -param=0_0
+					    scfw_cli -svc=pm -opt=get_clock_rate -param=SC_R_ALL
+		Miscellaneous service:
+			get_control: 	This function takes 2 parameters- Resource,Control
+					For a complete list of controls and resource refer to the SCFW API guide.
+					  scfw_cli -svc=misc -opt=get_control -param=SC_R_SYSTEM,SC_C_ID
+			set_control:    This function takes 3 parameters- Resource,Control,Value
+					  scfw_cli -svc=misc -opt=set_control -param=SC_R_SDHC_0,SC_C_VOLTAGE,3300
+			get_temp: 	This function takes 2 parameters- Resource,Temperature_sensor
+					For a complete list of temperature sensors refer to the SCFW API guide.
+				  	  scfw_cli -svc=misc -opt=get_temp -param=SC_R_A53,SC_MISC_TEMP
+			set_temp: 	This function takes 4 parameters- Resource,Temperature_sensor,Celsius_value,Tenths_value
+					  scfw_cli -svc=misc -opt=set_temp -param=SC_R_A53,SC_MISC_TEMP_HIGH,80,0
+			build_info: 	This function returns the build information for the SCFW, it is called as:
+					  scfw_cli -svc=misc -opt=build_info
+
+		The same model is used for all available functions and the parameters order follows the order in the SCFW API guide.
 
 ## Authors
 

@@ -9,6 +9,7 @@ BUILD_PROFILE ?= debug
 CONFIG_NAME ?= $(PLATFORM)-$(BUILD_PROFILE)
 OUTPUT_DIR = build/$(CONFIG_NAME)
 TARGET = $(OUTPUT_DIR)/$(ARTIFACT)
+USEFILE = $(ARTIFACT).use
 
 # Path to the BSP directory
 BSP_DIR = /home/manuel/Documents/Devices/imx8/QM/Software/QNX/cpu-card/PRC_patch02/bsp
@@ -63,6 +64,7 @@ $(OUTPUT_DIR)/%.o: %.c
 #Linking rule
 $(TARGET):$(OBJS)
 	$(LD) -o $(TARGET) $(LDFLAGS_all) $(LDFLAGS) $(OBJS) $(LIBS_all) $(LIBS)
+	usemsg -s __USAGENTO -s __USAGE -iVERSION -iTAGID -iDESCRIPTION $(TARGET) $(USEFILE)
 
 #Rules section for default compilation and linking
 all: $(TARGET)
