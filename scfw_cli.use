@@ -53,6 +53,8 @@ usage: scfw_cli [options]
 				  scfw_cli -svc=misc -opt=set_temp -param=SC_R_A53,SC_MISC_TEMP_HIGH,80,0
 		build_info: 	This function returns the build information for the SCFW, it is called as:
 				  scfw_cli -svc=misc -opt=build_info
+		unique_id:	This function return the unique id information, it is called as:
+				  scfw_cli -svc=misc -opt=unique_id
 
 	The same model is used for all available functions and the parameters 
 	order follows the order in the SCFW API guide.

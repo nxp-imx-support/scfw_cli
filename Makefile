@@ -12,7 +12,7 @@ TARGET = $(OUTPUT_DIR)/$(ARTIFACT)
 USEFILE = $(ARTIFACT).use
 
 # Path to the BSP directory
-BSP_DIR = /home/manuel/Documents/Devices/imx8/QM/Software/QNX/cpu-card/PRC_patch02/bsp
+BSP_DIR = /home/manuel/Documents/Devices/imx8/QXP/Software/QNX/MEK/PRC2/bsp-nxp-imx8qxp-cpu-sdp700-b180629-prc02/bsp
 
 #Compiler definitions
 

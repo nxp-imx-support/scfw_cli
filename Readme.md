@@ -43,6 +43,7 @@ The utility usage information can be displayed on QNX by calling 'use scfw_cli'
 		sc_misc_get_temp =get_temp
 		sc_misc_set_temp =set_temp
 		sc_misc_build_info =build_info
+		sc_misc_unique_id =unique_id
 	-param: The parameters will vary depending on the function that will be called, but all parameters are delimited by ','.
 		Refer to the SCFW documentation for a definition of parameters that each function takes.
 
@@ -75,6 +76,8 @@ The utility usage information can be displayed on QNX by calling 'use scfw_cli'
 					  scfw_cli -svc=misc -opt=set_temp -param=SC_R_A53,SC_MISC_TEMP_HIGH,80,0
 			build_info: 	This function returns the build information for the SCFW, it is called as:
 					  scfw_cli -svc=misc -opt=build_info
+			unique_id:	This function return the unique id information, it is called as:
+					  scfw_cli -svc=misc -opt=unique_id
 
 		The same model is used for all available functions and the parameters order follows the order in the SCFW API guide.
 

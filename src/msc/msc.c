@@ -39,6 +39,7 @@ typedef enum misc_opt_e{
 	get_temp,					/* Get temperature */
 	set_temp,					/* Set temperature */
 	bld_inf,					/* Build info */
+	unique_id,					/* Unique id */
 	inv
 }misc_opt_t;
 
@@ -117,6 +118,7 @@ static void misc_set_ctl(int fd, char *param);
 static void misc_get_temp(int fd, char *param);
 static void misc_set_temp(int fd, char *param);
 static void misc_bld_inf(int fd);
+static void misc_unique_id(int fd);
 
 /* Helper functions */
 static const char* sc_con2str(sc_ctrl_t con);
@@ -141,6 +143,7 @@ void misc_service_main(int fd, char *argv[]){
 		printf("3.- Get temperature \n");
 		printf("4.- Set temperature \n");
 		printf("5.- Get build info \n");
+		printf("6.- Get Unique ID \n");
 
 		scanf("%d", &svc);
 		if((svc >= inv) | (svc < get_ctl)){
@@ -161,6 +164,8 @@ void misc_service_main(int fd, char *argv[]){
 			misc_opt = set_temp;
 		} else if(strncmp(argv[0], "build_info", strlen("build_info")) == 0){
 			misc_opt = bld_inf;
+		}  else if(strncmp(argv[0], "unique_id", strlen("unique_id")) == 0){
+			misc_opt = unique_id;
 		} else{
 			misc_opt = inv;
 			printf("MISC: %s is an invalid service option\n", argv[0]);
@@ -183,6 +188,9 @@ void misc_service_main(int fd, char *argv[]){
 				break;
 			case bld_inf:
 				misc_bld_inf(fd);
+				break;
+			case unique_id:
+				misc_unique_id(fd);
 				break;
 			default:
 				printf("MISC: invalid service option\n");
@@ -390,6 +398,21 @@ void misc_bld_inf(int fd){
 	}
 }
 
+void misc_unique_id(int fd){
+	imx_dcmd_sc_misc_unique_id_t unique_id;
+	sc_err_t status;
+	int err, cnt = 0;
+
+	/* Get unique id */
+	do{
+		err = devctl(fd, IMX_DCMD_SC_MISC_UNIQUE_ID, &unique_id, sizeof(imx_dcmd_sc_misc_unique_id_t), (int *) &status);
+	} while ((err == EAGAIN) && (cnt++ < 10) && (delay(10) == 0));
+	if(status == SC_ERR_NONE){
+		printf("UID_H: %x, UID_L: %x\n", unique_id.id_h, unique_id.id_l);
+	} else{
+		printf("Failed to get Unique ID, %s (%d)\n", sc_status2str(status), status);
+	}
+}
 
 /********** Helper functions ******************/
 
