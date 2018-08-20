@@ -1,0 +1,108 @@
+# System Controller Firmware command line interface for Linux (scfw_cli)
+
+A command line interface that allows you to make SCFW requests using Linux
+
+## Building
+
+The build process is separated in two sections, building of the kernel module and of the user space application.
+Both the kernel module and user space utility need to be build for ARM64, a toolchain can be created using the
+yocto project BSP. For more details on how to build the BSP and the toolchain please refer to
+[yocto training.](https://community.nxp.com/docs/DOC-94849 "Yocto trainin in NXP community") and the yocto
+user's guide provided in the BSP.
+
+### Pre-requirements
+
+* BSP image built using the yocto project
+* Toolchain
+
+### Building the kernel module
+
+In order to be able to build the kernel module, the pre-requirements above must be fulfilled.
+
+The following are the steps that must be followed to build the kernel module.
+
+1. Source toolchain, e.g. source source /opt/fsl-imx-wayland/4.9.88-2.2.0_8qxp_beta2/environment-setup-aarch64-poky-linux
+2. Build kernel module
+
+```
+cd kernel_module/
+unset LDFLAGS
+export KERNELDIR=/Your_yocto_project_build_directory/tmp/work/imx8X-poky-linux/linux-imx/4.9.88-r0/build
+make
+```
+If you get a warning for undefined symbols by using the build directory, you will need to export the symbols
+and build the kernel manually, if your build was sucessful then you are done.
+
+>  Building modules, stage 2.
+>  MODPOST 1 modules
+> WARNING: "sc_misc_get_control" [/utility_directory/scfw_cli_Linux/kernel_module/sc.ko] undefined!
+> WARNING: "sc_misc_build_info" [/utility_directory/scfw_cli_Linux/kernel_module/sc.ko] undefined!
+
+3. Export SCFW symbols (this step is only needed if you had warnings while building the kernel module)
+
+* cd to kernel directory
+
+```
+cd /Your_yocto_project_build_directory/tmp/work/imx8X-poky-linux/linux-imx/4.9.88-r0/git
+```
+
+* Add symbols to drivers/soc/imx/sc/main/ipc.c
+
+```
+EXPORT_SYMBOL(sc_pm_set_clock_rate);
+EXPORT_SYMBOL(sc_misc_build_info);	// Added symbol
+EXPORT_SYMBOL(sc_misc_get_control);	// Added symbol
+```
+
+* Build kernel with added symbols
+Make sure to source the toolchain and unset LDFLAGS before attempting to build the kernel
+
+```
+make defconfig
+make
+```
+
+4. Update kernel with newly exported symbols
+
+* Copy newly built kernel with exported symbols to boot partition of SD card
+
+```
+cp arch/arm64/boot/Image /media/.../Boot imx8/Image
+sync
+``` 
+
+* Export KERNELDIR variable to point to current directory and attempt to build kernel module again (step 2)
+
+```
+export KERNELDIR=/Your_yocto_project_build_directory/tmp/work/imx8X-poky-linux/linux-imx/4.9.88-r0/git
+make
+```
+
+### Building the user space utility
+
+1. Source toolchain, e.g. source source /opt/fsl-imx-wayland/4.9.88-2.2.0_8qxp_beta2/environment-setup-aarch64-poky-linux
+2. cd user_space/
+3. make
+
+## Usage
+
+Once deployed on the target (you can copy both sc.ko and scfw_cli to the sdcard file system or deploy through NFS).
+
+1. Insert module into kernel
+
+```
+root@imx8qxpmek:~# insmod sc.ko                                                 
+[   23.633715] sc: loading out-of-tree module taints kernel.                    
+
+```
+
+2. Now scfw_cli can be used.
+
+The sintax to call scfw_cli is as follows: scfw_cli -option=param,param,...,param
+where the options are:
+-misc_get_control=SC_R_X,SC_C_X
+-misc_set_control=SC_R_X,SC_C_X,val
+-misc_build_info
+-pm_get_power_mode=SC_R_X
+-pm_set_power_mode=SC_R_X,SC_PM_PW_MODE_X
+
